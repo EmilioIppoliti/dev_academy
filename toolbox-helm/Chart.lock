@@ -1,0 +1,33 @@
+dependencies:
+- name: mosquitto-helm
+  repository: http://harbor.cat.cloud/chartrepo/easyiot
+  version: 0.1.0-cat
+- name: influxdb-helm
+  repository: http://harbor.cat.cloud/chartrepo/easyiot
+  version: 0.1.1-cat
+- name: grafana-helm
+  repository: http://harbor.cat.cloud/chartrepo/easyiot
+  version: 0.1.1-cat
+- name: prometheus-helm
+  repository: http://harbor.cat.cloud/chartrepo/easyiot
+  version: 0.1.0-cat
+- name: telegraftocloud-helm
+  repository: http://harbor.cat.cloud/chartrepo/easyiot
+  version: 0.1.1-cat
+- name: telegraftomap-helm
+  repository: http://harbor.cat.cloud/chartrepo/easyiot
+  version: 0.1.1-cat
+- name: datagen-helm
+  repository: http://harbor.cat.cloud/chartrepo/easyiot
+  version: 0.1.0-cat
+- name: nfs-subdir-external-provisioner
+  repository: http://harbor.cat.cloud/chartrepo/easyiot
+  version: 0.1.0-cat
+- name: telegrafopcua-helm
+  repository: http://harbor.cat.cloud/chartrepo/easyiot
+  version: 0.1.1-cat
+- name: telegrafs7comm-helm
+  repository: http://harbor.cat.cloud/chartrepo/easyiot
+  version: 0.1.1-cat
+digest: sha256:8c9a95f52d536a34ad2c878e85d9f47bf63a254c6a0bc99548575daee2487aa9
+generated: "2023-03-22T11:40:40.0552705+01:00"

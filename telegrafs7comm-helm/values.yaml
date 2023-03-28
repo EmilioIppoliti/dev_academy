@@ -1,0 +1,197 @@
+## Default values.yaml for Telegraf
+## This is a YAML-formatted file.
+## ref: https://hub.docker.com/r/library/telegraf/tags/
+
+replicaCount: 1
+fullnameOverride: "telegrafs7comm"
+image:
+  repository: "harbor1.cloud.vm/easyiot/telegrafs7comm"
+  # Overrides the Grafana image tag whose default is the chart appVersion
+  tag: "latest"
+  sha: ""
+  pullPolicy: Always
+  pullSecrets:
+    - regcred
+podAnnotations: {}
+
+podLabels: {}
+
+imagePullSecrets: []
+
+## Configure args passed to Telegraf containers
+args: []
+
+
+# The name of a secret in the same kubernetes namespace which contains values to
+# be added to the environment (must be manually created)
+# This can be useful for auth tokens, etc.
+
+# envFromSecret: "telegraf-tokens"
+
+
+env:
+  - name: HOSTNAME
+    value: "telegraf-s7comm"
+
+# An older "volumeMounts" key was previously added which will likely
+# NOT WORK as you expect. Please use this newer configuration.
+
+# volumes:
+# - name: telegraf-output-influxdb2
+#   configMap:
+#     name: "telegraf-output-influxdb2"
+# mountPoints:
+# - name: telegraf-output-influxdb2
+#   mountPath: /etc/telegraf/conf.d
+#   subPath: influxdb2.conf
+
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+resources: {}
+  # requests:
+  #   memory: 128Mi
+  #   cpu: 100m
+  # limits:
+  #   memory: 128Mi
+  #   cpu: 100m
+
+## Node labels for pod assignment
+## ref: https://kubernetes.io/docs/user-guide/node-selection/
+nodeSelector: {}
+
+## Affinity for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+##
+affinity: {}
+
+## Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+##
+tolerations: []
+# - key: "key"
+#   operator: "Equal|Exists"
+#   value: "value"
+#   effect: "NoSchedule|PreferNoSchedule|NoExecute(1.6 only)"
+
+service:
+  enabled: false
+  type: ClusterIP
+  annotations: {}
+
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: true
+  # Create only for the release namespace or cluster wide (Role vs ClusterRole)
+  clusterWide: false
+  # Rules for the created rule
+  rules: []
+# When using the prometheus input to scrape all pods you need extra rules set to the ClusterRole to be
+# able to scan the pods for scraping labels. The following rules have been taken from:
+# https://github.com/helm/charts/blob/master/stable/prometheus/templates/server-clusterrole.yaml#L8-L46
+#    - apiGroups:
+#        - ""
+#      resources:
+#        - nodes
+#        - nodes/proxy
+#        - nodes/metrics
+#        - services
+#        - endpoints
+#        - pods
+#        - ingresses
+#        - configmaps
+#      verbs:
+#        - get
+#        - list
+#        - watch
+#    - apiGroups:
+#        - "extensions"
+#      resources:
+#        - ingresses/status
+#        - ingresses
+#      verbs:
+#        - get
+#        - list
+#        - watch
+#    - nonResourceURLs:
+#        - "/metrics"
+#      verbs:
+#        - get
+
+serviceAccount:
+  # Specifies whether a ServiceAccount should be created
+  create: true
+  # The name of the ServiceAccount to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+  # Annotations for the ServiceAccount
+  annotations: {}
+
+## Exposed telegraf configuration
+## For full list of possible values see `/docs/all-config-values.yaml` and `/docs/all-config-values.toml`
+## ref: https://docs.influxdata.com/telegraf/v1.1/administration/configuration/
+config:
+  agent:
+    interval: "10s"
+    round_interval: true
+    metric_batch_size: 1000
+    metric_buffer_limit: 10000
+    collection_jitter: "0s"
+    flush_interval: "10s"
+    flush_jitter: "0s"
+    precision: ""
+    debug: false
+    quiet: false
+    logfile: ""
+    hostname: "$HOSTNAME"
+    omit_hostname: false
+  processors:
+    - enum:
+        mapping:
+          field: "status"
+          dest: "status_code"
+          value_mappings:
+            healthy: 1
+            problem: 2
+            critical: 3
+  outputs:
+    - mqtt: 
+        servers: 
+          - "mosquitto:1883"
+        keep_alive:  60 
+        topic_prefix: "s7comm"
+      
+
+metrics:
+  s7comm:
+    enabled: true 
+    name: "S7300"
+    plc:
+      ip: "192.168.1.1"
+      rack: "0"
+      slot: "2"
+    connectTimeout: "10s"
+    requestTimeout: "2s"
+    nodes: ['{name="Ballerino_(monitoraggio)", address="DB98.DBD100", type="real"},{name="Cavalletto_1_(stato_marcia_arresto)", address="DB40.DBX1.3", type="bool"},{name="Cavalletto_1_(allarme)", address="DB100.DBX91.3", type="bool"},{name="Cavalletto_2_(stato_marcia_arresto)", address="DB50.DBX1.3", type="bool"},{name="Cavalletto_2_(allarme)", address="DB100.DBX135.3", type="bool"},{name="Traino_Mandata_(stato_marcia_arresto)", address="DB20.DBX1.3", type="bool"},{name="Traino_Mandata_(allarme)", address="DB100.DBX3.3", type="bool"},{name="Traino_Tirata_(stato_marcia_arresto)", address="DB30.DBX1.3", type="bool"},{name="Traino_Tirata_(allarme)", address="DB100.DBX47.3", type="bool"},{name="Protezioni_traino_Mandata_(monitoraggio)", address="DB5.DBX8.7", type="bool"},{name="Protezioni_traino_Mandata_(allarme)", address="DB90.DBX20.7", type="bool"},{name="Protezioni_traino_Tirata_(monitoraggio)", address="DB5.DBX9.0", type="bool"},{name="Protezioni_traino_Tirata_(allarme)", address="DB90.DBX21.0", type="bool"},{name="Pompa_riciclo_(stato_marcia_arresto)", address="DB98.DBX64.6", type="bool"},{name="Pompa_riciclo_(allarme)", address="DB98.DBX123.7", type="bool"},{name="Pompa_distaccante_(stato_marcia_arresto)", address="DB98.DBX64.3", type="bool"},{name="Pompa_distaccante_(allarme)", address="DB98.DBX124.0", type="bool"},{name="Chiller_(stato_marcia_arresto)", address="DB98.DBX64.2", type="bool"},{name="Velocita_traino_1_(ingresso_master)", address="DB98.DBD68", type="real"},{name="Velocita_traino_2_(uscita_slave)", address="DB98.DBD72", type="real"},{name="Traini_tiro_velocita", address="DB98.DBX0.4", type="bool"},{name="Traini_Correzione_tiro_2", address="DB98.DBD8", type="real"},{name="Velocita_Cavalletto_1", address="DB98.DBW108", type="int"},{name="Velocita_Cavalletto_2", address="DB98.DBW110", type="int"},{name="Cavalletti_1_selezionato", address="DB98.DBX0.5", type="bool"},{name="Cavalletti_2_selezionato", address="DB98.DBX0.7", type="bool"},{name="Scelta_Sikora_zumbach", address="DB98.DBX40.0", type="bool"},{name="Valore_correzione_sikora_zumbach", address="DB95.DBD4", type="real"},{name="Assorbimento_motore_traino_1", address="DB98.DBD84", type="real"},{name="Assorbimento_motore_traino_2", address="DB98.DBD88", type="real"},{name="Assorbimento_motore_cavalletto_1", address="DB98.DBW112", type="int"},{name="Assorbimento_motore_cavalletto_2", address="DB98.DBW114", type="int"},{name="Velocita_(metri_minuto)_Linea", address="DB98.DBD72", type="real"},{name="Metri_prodotti", address="DB18.DBD44", type="real"}']
+
+  health:
+    enabled: false
+    service_address: "http://:8888"
+    threshold: 5000.0
+  internal:
+    enabled: false
+    collect_memstats: false
+
+# Lifecycle hooks
+# hooks:
+#   postStart: ["/bin/sh", "-c", "echo Telegraf started"]
+#   preStop: ["/bin/sh", "-c", "sleep 60"]
+
+## Pod disruption budget configuration
+##
+pdb:
+  ## Specifies whether a Pod disruption budget should be created
+  ##
+  create: true
+  minAvailable: 1
+  # maxUnavailable: 1

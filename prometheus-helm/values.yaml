@@ -1,0 +1,43 @@
+# Default values for prometheus-helm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+fullnameOverride: "prometheus-edge"
+namespaceOverride: "dev"
+
+
+service:
+  type: ClusterIP
+  port: 9090
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+config:
+  cluster: "https://192.192.192.191:6443"
+nodeExporter:
+    image:
+      repository:  prom/node-exporter
+      pullPolicy: IfNotPresent
+      tag: "latest"
+prometheus:
+    image:
+      repository:  prom/prometheus
+      pullPolicy: IfNotPresent
+      tag: "latest"
+kubeStateMetrics:
+    image:
+      repository: k8s.gcr.io/kube-state-metrics/kube-state-metrics
+      pullPolicy: IfNotPresent
+      tag: "v2.3.0"

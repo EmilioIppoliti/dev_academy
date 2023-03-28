@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-s7
+  labels:
+    {{- include "telegraf.labels" . | nindent 4 }}
+data:
+  s7comm.plugin.conf: |-
+    [[inputs.s7comm]]
+      name={{ .Values.metrics.s7comm.name | quote }}
+      plc_ip={{ .Values.metrics.s7comm.plc.ip | quote }}
+      plc_rack={{ .Values.metrics.s7comm.plc.rack | quote }}
+      plc_slot={{ .Values.metrics.s7comm.plc.slot | quote }}
+      connect_timeout = {{ .Values.metrics.s7comm.connectTimeout | quote }}
+      request_timeout = {{ .Values.metrics.s7comm.requestTimeout | quote }}
+      nodes = [{{range  $index,$element :=  .Values.metrics.s7comm.nodes}}{{if $index }},{{end}} {{  $element  }}  {{ end }}]
+
+
+
+
+
+
+   

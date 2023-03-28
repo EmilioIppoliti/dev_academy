@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ if .Values.global }} {{ .Values.global.mosquitto.host | quote }} {{ else }} {{ include "mosquitto-helm.fullname" . }} {{ end}}
+  labels:
+    {{- include "mosquitto-helm.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - port: 1883
+    targetPort: 1883
+    protocol: TCP
+    {{- if eq .Values.service.type "NodePort" }}
+    nodePort: {{ .Values.service.nodePort }}
+    {{- end }}
+  selector:
+    {{- include "mosquitto-helm.selectorLabels" . | nindent 4 }}

@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "grafana.fullname" . }}-influxdb1-datasource
+  labels:
+     grafana_datasource: "1"
+data:
+  influxdb1-datasource.yaml: |-
+      # config file version
+      {
+        "apiVersion": 1 ,
+        "datasources": [
+          {
+            "name" : "influxdb1",
+            "type" : "influxdb",
+            "access" : "proxy",
+            "orgId": 1,
+            "url": {{ if .Values.global }} "http://{{ .Values.global.influxdb.host }}:{{ .Values.global.influxdb.port }}" {{ else }} "http://{{ .Values.datasources.influxdbV1.url}}" {{ end }} ,
+            "password": "pwd",
+            "user": "admin",
+            "database": {{ if .Values.global }} {{ index .Values.global.subsystemsList 0 | quote }} {{- else }} {{ .Values.datasources.influxdbV1.defaultDatabase | quote}} {{ end }},
+            "version" : 1,
+            "editable": true
+          }
+      ]
+      }

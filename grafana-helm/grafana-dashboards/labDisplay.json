@@ -1,0 +1,368 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "datasource": {
+          "type": "testdata",
+          "uid": "P53465F745837BCFD"
+        },
+        "gridPos": {
+          "h": 14,
+          "w": 23,
+          "x": 0,
+          "y": 0
+        },
+        "id": 4,
+        "options": {
+          "forceImageRefresh": true,
+          "imageUrl": "http://gitea.cloud.vm/HPE/images/raw/branch/main/dash-transparent.png",
+          "lockSensors": false,
+          "mappings": [],
+          "sensors": [
+            {
+              "backgroundBlink": false,
+              "backgroundColor": "#96D98D",
+              "bold": false,
+              "decimals": 1,
+              "fontColor": "#24292e",
+              "iconName": "temperature-low",
+              "link": "",
+              "mappingIds": [],
+              "name": "Temperature",
+              "position": {
+                "x": 28.180212014134277,
+                "y": 32.85420944558521
+              },
+              "query": {
+                "alias": "",
+                "id": "A"
+              },
+              "unit": "celsius",
+              "valueBlink": false,
+              "visible": true
+            },
+            {
+              "backgroundBlink": false,
+              "backgroundColor": "#FFEE52",
+              "bold": false,
+              "decimals": 0,
+              "fontColor": "#24292e",
+              "iconName": "weight",
+              "link": "",
+              "mappingIds": [],
+              "name": "Pressure",
+              "position": {
+                "x": 56.890459363957596,
+                "y": 27.61806981519507
+              },
+              "query": {
+                "alias": "",
+                "id": "B"
+              },
+              "unit": "pressurehpa",
+              "valueBlink": false,
+              "visible": true
+            },
+            {
+              "backgroundBlink": false,
+              "backgroundColor": "#FFB357",
+              "bold": false,
+              "decimals": 1,
+              "fontColor": "#24292e",
+              "iconName": "smog",
+              "link": "",
+              "mappingIds": [],
+              "name": "C02",
+              "position": {
+                "x": 45.856787954571466,
+                "y": 17.248459958932237
+              },
+              "query": {
+                "alias": "",
+                "id": "C"
+              },
+              "unit": "ppm",
+              "valueBlink": false,
+              "visible": true
+            },
+            {
+              "backgroundBlink": false,
+              "backgroundColor": "#8AB8FF",
+              "bold": false,
+              "decimals": 0,
+              "fontColor": "#24292e",
+              "iconName": "fire",
+              "link": "",
+              "mappingIds": [],
+              "name": "Humidity",
+              "position": {
+                "x": 10.60070671378092,
+                "y": 6.776180698151951
+              },
+              "query": {
+                "alias": "",
+                "id": "D"
+              },
+              "unit": "percent",
+              "valueBlink": false,
+              "visible": true
+            },
+            {
+              "backgroundBlink": false,
+              "backgroundColor": "#CA95E5",
+              "bold": false,
+              "decimals": 1,
+              "fontColor": "#24292e",
+              "iconName": "soap",
+              "link": "",
+              "mappingIds": [],
+              "name": "NO2",
+              "position": {
+                "x": 88.42756183745583,
+                "y": 21.513411578747604
+              },
+              "query": {
+                "alias": "",
+                "id": "E"
+              },
+              "unit": "conμgm3",
+              "valueBlink": false,
+              "visible": true
+            },
+            {
+              "backgroundBlink": false,
+              "backgroundColor": "#ffffff",
+              "bold": false,
+              "decimals": 0,
+              "fontColor": "#5d3905",
+              "iconName": "dumpster",
+              "link": "",
+              "mappingIds": [],
+              "name": "Garbage collected",
+              "position": {
+                "x": 82.42049469964664,
+                "y": 49.69199178644764
+              },
+              "query": {
+                "alias": "",
+                "id": "F"
+              },
+              "unit": "litre",
+              "valueBlink": false,
+              "visible": true
+            },
+            {
+              "backgroundBlink": false,
+              "backgroundColor": "#E02F44",
+              "bold": false,
+              "decimals": 0,
+              "fontColor": "#ffffff",
+              "iconName": "bolt",
+              "link": "",
+              "mappingIds": [],
+              "name": "Power consuption",
+              "position": {
+                "x": 1.325088339222615,
+                "y": 45.27720739219713
+              },
+              "query": {
+                "alias": "",
+                "id": "G"
+              },
+              "unit": "watt",
+              "valueBlink": false,
+              "visible": true
+            },
+            {
+              "backgroundBlink": false,
+              "backgroundColor": "#1F60C4",
+              "bold": false,
+              "decimals": 0,
+              "fontColor": "#FFF",
+              "iconName": "parking",
+              "link": "",
+              "mappingIds": [],
+              "name": "FREE Parking",
+              "position": {
+                "x": 79.59363957597174,
+                "y": 83.16221765913758
+              },
+              "query": {
+                "alias": "",
+                "id": "H"
+              },
+              "valueBlink": false,
+              "visible": true
+            }
+          ],
+          "sensorsTextSize": 7
+        },
+        "pluginVersion": "1.0.7",
+        "targets": [
+          {
+            "csvContent": "\"time\",\"temperature\"\r\n2022-08-25 17:43:51,19",
+            "datasource": {
+              "type": "testdata",
+              "uid": "P53465F745837BCFD"
+            },
+            "refId": "A",
+            "scenarioId": "csv_content"
+          },
+          {
+            "csvContent": "\"time\",\"pressure\"\r\n2022-08-25 17:43:51,1018",
+            "datasource": {
+              "type": "testdata",
+              "uid": "P53465F745837BCFD"
+            },
+            "refId": "B",
+            "scenarioId": "csv_content"
+          },
+          {
+            "csvContent": "\"time\",\"parking\"\r\n2022-08-25 17:43:51,68",
+            "datasource": {
+              "type": "testdata",
+              "uid": "P53465F745837BCFD"
+            },
+            "refId": "C",
+            "scenarioId": "csv_content"
+          },
+          {
+            "csvContent": "\"time\",\"humidity\"\r\n2022-08-25 17:43:51,74",
+            "datasource": {
+              "type": "testdata",
+              "uid": "P53465F745837BCFD"
+            },
+            "refId": "D",
+            "scenarioId": "csv_content"
+          },
+          {
+            "csvContent": "\"time\",\"n02\"\r\n2022-08-25 17:43:51,0.1",
+            "datasource": {
+              "type": "testdata",
+              "uid": "P53465F745837BCFD"
+            },
+            "refId": "E",
+            "scenarioId": "csv_content"
+          },
+          {
+            "csvContent": "\"time\",\"bin\"\r\n2022-08-25 17:43:51,56",
+            "datasource": {
+              "type": "testdata",
+              "uid": "P53465F745837BCFD"
+            },
+            "hide": false,
+            "refId": "F",
+            "scenarioId": "csv_content"
+          },
+          {
+            "csvContent": "\"time\",\"power\"\r\n2022-08-25 17:43:51,86",
+            "datasource": {
+              "type": "testdata",
+              "uid": "P53465F745837BCFD"
+            },
+            "hide": false,
+            "refId": "G",
+            "scenarioId": "csv_content"
+          },
+          {
+            "csvContent": "\"time\",\"parking\"\r\n2022-08-25 17:43:51,69",
+            "datasource": {
+              "type": "testdata",
+              "uid": "P53465F745837BCFD"
+            },
+            "hide": false,
+            "refId": "H",
+            "scenarioId": "csv_content"
+          }
+        ],
+        "transparent": true,
+        "type": "pierosavi-imageit-panel"
+      },
+      {
+        "gridPos": {
+          "h": 1,
+          "w": 1,
+          "x": 23,
+          "y": 0
+        },
+        "id": 12,
+        "options": {
+          "activeTheme": "tema",
+          "disableThemePicker": true,
+          "themes": [
+            {
+              "name": "tema",
+              "styles": [
+                {
+                  "props": {
+                    "theme": "default"
+                  },
+                  "type": "basetheme"
+                },
+                {
+                  "props": {
+                    "url": "https://gitea.cloud.vm/HPE/images/raw/branch/main/dash-wall1.jpg"
+                  },
+                  "type": "bgimage"
+                },
+                {
+                  "props": {
+                    "url": ""
+                  },
+                  "type": "url"
+                },
+                {
+                  "props": {
+                    "text": ""
+                  },
+                  "type": "style"
+                }
+              ]
+            }
+          ]
+        },
+        "pluginVersion": "0.2.1",
+        "transparent": true,
+        "type": "yesoreyeram-boomtheme-panel"
+      }
+    ],
+    "schemaVersion": 35,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+      "list": []
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "EasyIoT Lab Devices",
+    "uid": "EXSJadH4z",
+    "version": 2,
+    "weekStart": ""
+  }

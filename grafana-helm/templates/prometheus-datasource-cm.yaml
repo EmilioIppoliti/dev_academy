@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "grafana.fullname" . }}-prometheus-datasource
+  labels:
+     grafana_datasource: "1"
+data:
+  prometheus-datasource.yaml: |-
+      {
+          "apiVersion": 1,
+          "datasources": [
+            {
+              "access":"proxy",
+              "editable": true,
+              "name": "prometheus",
+              "orgId": 1,
+              "type": "prometheus",
+              "url": {{ if .Values.global }} "http://{{ .Values.global.prometheus.host }}:{{ .Values.global.prometheus.port }}" {{ else }}"http://{{ .Values.datasources.prometheus.url }}" {{ end }},
+              "version": 1
+            } 
+          ]
+      }

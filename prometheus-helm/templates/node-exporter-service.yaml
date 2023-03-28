@@ -1,0 +1,18 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: {{ include "prometheus-helm.fullname" . }}-node-exporter
+  annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/port:   '9100'
+spec:
+  selector:
+      app.kubernetes.io/component: exporter
+      app.kubernetes.io/name: {{ include "prometheus-helm.fullname" . }}-node-exporter
+  ports:
+  - name: {{ include "prometheus-helm.fullname" . }}-node-exporter
+    protocol: TCP
+    port: 9100
+    targetPort: 9100

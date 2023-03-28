@@ -1,0 +1,12 @@
+{{- if .Values.initScripts.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "influxdb.fullname" . }}-init
+  labels:
+    {{- include "influxdb.labels" . | nindent 4 }}
+data:
+  init.iql: |+
+      CREATE DATABASE  {{ if .Values.global }} {{ .Values.global.systemName | quote }} {{ else }} {{ .Values.initScripts.defaultDatabase  | quote}} {{ end }}  WITH DURATION 300d REPLICATION 1 NAME "rp_300d"
+
+{{- end -}}

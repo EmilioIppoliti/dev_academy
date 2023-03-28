@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/component: exporter
+    app.kubernetes.io/name: {{ include "prometheus-helm.fullname" . }}-kube-state-metrics
+    app.kubernetes.io/version: 2.3.0
+  name: {{ include "prometheus-helm.fullname" . }}-kube-state-metrics
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "prometheus-helm.fullname" . }}-kube-state-metrics
+subjects:
+- kind: ServiceAccount
+  name: {{ include "prometheus-helm.fullname" . }}-kube-state-metrics
+  namespace: kube-system

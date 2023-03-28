@@ -1,0 +1,1 @@
+"values": "\ngrafana-helm:\n    ingress:\n      enabled: true\n      className: \"\"\n      annotations:\n        kubernetes.io/ingress.class: traefik\n        # kubernetes.io/tls-acme: \"true\"\n      hosts: [\"grafana.cat.core\"]\n      path: /\n      pathType: Prefix\n      tls: \n        - hosts:\n          - grafana.cat.core\n          secretName: grafana-tls \n"

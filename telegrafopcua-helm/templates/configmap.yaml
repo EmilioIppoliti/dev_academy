@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "telegraf.fullname" . }}
+  labels:
+    {{- include "telegraf.labels" . | nindent 4 }}
+data:
+  telegraf.conf: |+
+    {{- $tplVersion := include "detect.version" . }}
+    {{ template "global_tags" .Values.config.global_tags }}
+    {{ template "agent" .Values.config.agent }}
+    {{ template "processors" (list $tplVersion .Values.config.processors) }}
+    {{ template "aggregators" (list $tplVersion .Values.config.aggregators) }}
+    {{ template "outputs" (list $tplVersion .Values.config.outputs) }}
+
+    {{- if .Values.metrics.opcua.enabled }}
+    [[inputs.opcua]]
+    endpoint = {{ .Values.metrics.opcua.endpoint | quote }}
+    {{- if .Values.metrics.opcua.securityMode }}
+    security_mode= {{ .Values.metrics.opcua.securityMode | quote }}
+    {{- end }}
+    {{- if .Values.metrics.opcua.securityPolicy }}
+    security_policy= {{ .Values.metrics.opcua.securityPolicy | quote }}
+    {{- end }}
+      [[inputs.opcua.group]]
+        name = {{ .Values.metrics.opcua.groupname | quote }}
+        namespace = {{ .Values.metrics.opcua.namespace | quote }}
+        identifier_type = {{ .Values.metrics.opcua.identifierType | quote }}
+        nodes = [{{range  $index,$element :=  .Values.metrics.opcua.nodes}}{{if $index }},{{end}} {{  $element  }}  {{ end }}]
+    {{- end }}
+    {{- if .Values.metrics.health.enabled }}
+    [[outputs.health]]
+      service_address = "{{ .Values.metrics.health.service_address }}"
+      namepass = ["internal_write"]
+      [[outputs.health.compares]]
+        field = "buffer_size"
+        lt = {{ .Values.metrics.health.threshold | int64 }}.0
+      [[outputs.health.contains]]
+        field = "buffer_size"
+    {{- end }}
+    {{ template "inputs" (list $tplVersion .Values.config.inputs) }}
+    {{- if .Values.metrics.internal.enabled }}
+    [[inputs.internal]]
+      collect_memstats = {{ or .Values.metrics.internal.collect_memstats (.Values.metrics.collect_memstats | default false) }}
+    {{- end }}

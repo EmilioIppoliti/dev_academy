@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards
+  labels:
+    grafana_dashboard: "1"
+data:
+{{if eq (include "monitoringDisplayEnabled" $) "true" }}
+  monitoring.json: |
+{{ .Files.Get "grafana-dashboards/monitoring.json" | indent 4 }}
+{{ end }}
+{{if eq (include "mapDashboardEnabled" $) "true" }}
+  map.json: |
+{{ .Files.Get "grafana-dashboards/map.json" | indent 4 }}
+{{ end }}
+{{ if eq (include "mobileAppEnabled" $) "true" }}
+  mobileApp.json: |
+{{ .Files.Get "grafana-dashboards/mobileApp.json" | indent 4 }}
+{{ end  }}
+{{ if eq (include "forecastDisplayEnabled" $) "true" }}
+  forecastingDisplay.json: |
+{{ .Files.Get "grafana-dashboards/forecastingDisplay.json" | indent 4 }}
+{{ end  }}
+{{ if eq (include "labDisplayEnabled" $) "true" }}
+  labDisplay.json: |
+{{ .Files.Get "grafana-dashboards/labDisplay.json" | indent 4 }}
+{{ end  }}
+{{ if eq (include "DashboardsCaterpillarEnabled" $) "true" }}
+  CATDashAllarm.json: |
+{{ .Files.Get "grafana-dashboards/CATdashMain.json" | indent 4 }}
+  CATDashTraino1.json: |
+{{ .Files.Get "grafana-dashboards/CATdashTraino1.json" | indent 4 }}
+  CATDashTraino2.json: |
+{{ .Files.Get "grafana-dashboards/CATdashTraino2.json" | indent 4 }}
+  CATDashCavalletto2.json: |
+{{ .Files.Get "grafana-dashboards/CATdashCavalletto2.json" | indent 4 }}
+  CATDashCavalletto1.json: |
+{{ .Files.Get "grafana-dashboards/CATdashCavalletto1.json" | indent 4 }}
+  CATdashPompa.json: |
+{{ .Files.Get "grafana-dashboards/CATdashPompa.json" | indent 4 }}
+  CATdashEstrusore.json: |
+{{ .Files.Get "grafana-dashboards/CATdashEstrusore.json" | indent 4 }}
+{{ end  }}
+

@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "datagen-helm.fullname" . }}
+  labels:
+    {{- include "datagen-helm.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "datagen-helm.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "datagen-helm.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "datagen-helm.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: [ "/bin/sh", "-c", "python3 datagen.py" ]
+          #TODO: env : influxdb host and mosquitto
+          env:
+          {{- if .Values.mosquitto.tags }}
+            - name: MOSQUITTO_TAGS
+              value:  {{ .Values.mosquitto.tags | quote }} 
+          {{- end }}
+            - name: MOSQUITTO_HOSTNAME
+              value: {{ if .Values.global }} {{ .Values.global.mosquitto.host | quote }} {{else }} {{ .Values.mosquitto.host | quote }} {{ end }} 
+            - name: MOSQUITTO_PORT
+              value: {{ if .Values.global }} {{ .Values.global.mosquitto.port | quote }} {{else }} {{ .Values.mosquitto.port | quote }} {{ end }}
+            - name: MOSQUITTO_TOPICS
+              value: {{ .Values.mosquitto.topics | quote }} 
+            - name: INFLUXDB_HOSTNAME
+              value: {{ if .Values.global }} {{ .Values.global.influxdb.host | quote }} {{else }} {{ .Values.influxdb.host | quote }} {{ end }}
+            - name: INFLUXDB_PORT
+              value: {{ if .Values.global }} {{ .Values.global.influxdb.port | quote }} {{else }} {{ .Values.influxdb.port | quote }} {{ end }}
+            - name: INFLUXDB_USER
+              value:  {{ .Values.influxdb.user | quote }} 
+            - name: INFLUXDB_PASSWORD
+              value: {{ .Values.influxdb.password | quote }} 
+            - name: SUBSYSTEMS_LIST
+              value: {{ if .Values.global }} {{ .Values.global.subsystemsList | quote }} {{else }} {{ .Values.subsystemsList | quote }} {{ end }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

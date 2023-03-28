@@ -1,0 +1,295 @@
+{
+	"apiVersion": "argoproj.io/v1alpha1",
+	"kind": "ApplicationSet",
+	"metadata": {
+		"annotations": {
+		},
+		"labels": {
+			"app.kubernetes.io/instance": "apps"
+		},
+
+		"name": "application-set-edge",
+		"namespace": "argocd"
+	},
+	"spec": {
+		"generators": [
+			{
+				"clusters": {
+					"selector": {
+						"matchLabels": {
+							"DevelopmentEdge": "true"
+						}
+					}
+				}
+			}
+		],
+		"template": {
+			"metadata": {
+				"name": "{{name}}-core"
+			},
+			"spec": {
+				"destination": {
+					"namespace": "dev",
+					"server": "{{server}}"
+				},
+				"project": "default",
+				"source": {
+					"chart": "toolbox-helm",
+					"helm": {
+						"parameters": [
+							{
+								"name": "telegrafToMap.enabled",
+								"value": "false"
+							},
+							{
+								"name": "telegrafToCloud.enabled",
+								"value": "true"
+							},
+							{
+								"name": "telegrafOpcua.enabled",
+								"value": "{{metadata.labels.OPCUA}}"
+							},
+							{
+								"name": "telegrafS7comm.enabled",
+								"value": "{{metadata.labels.S7}}"
+							},
+							{
+								"name": "mosquitto.enabled",
+								"value": "true"
+							},
+							{
+								"name": "influxdb.enabled",
+								"value": "false"
+							},
+							{
+								"name": "grafana.enabled",
+								"value": "true"
+							},
+							{
+								"name": "prometheus.enabled",
+								"value": "true"
+							},
+							{
+								"name": "datagen.enabled",
+								"value": "false"
+							},
+							{
+								"name": "nfsEnabled",
+								"value": "false"
+							},
+
+							{
+								"name": "grafana-helm.fullnameOverride",
+								"value": "grafana"
+							},
+							{
+								"name": "grafana-helm.datasources.influxdbV1.enabled",
+								"value": "true"
+							},
+							{
+								"name": "grafana-helm.datasources.influxdbV1.defaultDatabase",
+								"value": "Cat"
+							},
+							{
+								"name": "grafana-helm.datasources.influxdbV2.url",
+								"value": "influxdb:8086"
+							},
+							{
+								"name": "grafana-helm.datasources.influxdbV2.enabled",
+								"value": "true"
+							},
+							{
+								"name": "grafana-helm.datasources.prometheus.url",
+								"value": "prometheus:8080"
+							},
+							{
+								"name": "grafana-helm.customized.dashboards.monitoring.enabled",
+								"value": "true"
+
+							},
+							{
+								"name": "grafana-helm.customized.dashboards.map.enabled",
+								"value": "false"
+
+							},
+							{
+								"name": "grafana-helm.customized.dashboards.caterpillar.enabled",
+								"value": "false"
+
+							},
+						
+							{
+								"name": "influxdb-helm.fullnameOverride",
+								"value": "influxdb"
+							},
+							{
+								"name": "influxdb-helm.service.nodePorts.http",
+								"value": "30086"
+							},
+							{
+								"name": "influxdb-helm.initScripts.defaultDatabase",
+								"value": "Cat"
+							},
+							{
+								"name": "mosquitto-helm.fullnameOverride",
+								"value": "mosquitto"
+							},
+							{
+								"name": "mosquitto-helm.service.type",
+								"value": "NodePort"
+							},
+							{
+								"name": "mosquitto-helm.service.nodePort",
+								"value": "30183"
+							},
+							{
+								"name": "prometheus-helm.fullnameOverride",
+								"value": "prometheus"
+							},
+							{
+								"name": "prometheus-helm.prometheus.service.type",
+								"value": "NodePort"
+							},
+							{
+								"name": "prometheus-helm.prometheus.service.nodePort",
+								"value": "30011"
+							},
+							{
+								"name": "prometheus-helm.config.cluster",
+								"value": "{{server}}"
+							},
+							{
+								"name": "telegraftomap-helm.inputs.mosquitto.host",
+								"value": "mosquitto"
+							},
+							{
+								"name": "telegraftomap-helm.inputs.mosquitto.port",
+								"value": "1883"
+							},
+							{
+								"name": "telegraftomap-helm.outputs.influxdb.host",
+								"value": "influxdb"
+							},
+							{
+								"name": "telegraftomap-helm.outputs.influxdb.port",
+								"value": "8086"
+							},
+							{
+								"name": "telegraftomap-helm.outputs.influxdb.bucket",
+								"value": "Cat"
+
+							},
+							{
+								"name": "telegraftomap-helm.fullnameOverride",
+								"value": "telegraftomap"
+							},
+							{
+								"name": "telegraftocloud-helm.fullnameOverride",
+								"value": "telegraftocloud"
+							},
+							{
+								"name": "telegraftocloud-helm.inputs.mosquitto.host",
+								"value": "mosquitto"
+							},
+							{
+								"name": "telegraftocloud-helm.inputs.mosquitto.host",
+								"value": "mosquitto"
+							},
+							{
+								"name": "telegraftocloud-helm.inputs.mosquitto.port",
+								"value": 1883
+							},
+							{
+								"name": "telegraftocloud-helm.inputs.mosquitto.topics",
+								"value": "#"
+							},
+							{
+								"name": "telegraftocloud-helm.outputs.mosquittoCloud.host",
+								"value": "172.28.83.154"
+							},
+							{
+								"name": "telegraftocloud-helm.outputs.mosquittoCloud.port",
+								"value": 30183
+							},
+							{
+								"name": "telegraftocloud-helm.outputs.mosquittoCloud.topicPrefix",
+								"value": "opcua_metrics"
+							},
+
+
+							{
+								"name": "telegraftocloud-helm.inputs.mosquitto.topics",
+								"value": "#"
+							},							
+
+
+							{
+								"name": "telegrafopcua-helm.fullnameOverride",
+								"value": "telegrafopcua"
+							},
+
+							{
+								"name": "telegrafopcua-helm.metrics.opcua.endpoint",
+								"value": "opc.tcp://90.90.90.12:4840"
+							},
+
+							{
+								"name": "telegrafopcua-helm.metrics.opcua.groupname",
+								"value": "opcua_metrics" 
+							},
+							
+							{
+								"name": "telegrafopcua-helm.metrics.opcua.namespace",
+								"value": "2" 
+							},
+							{
+								"name": "telegrafopcua-helm.metrics.opcua.identifierType",
+								"value": "s" 
+							},
+							{
+								"name": "telegrafs7comm-helm.metrics.s7comm.name",
+								"value": "S7300" 
+							},
+							{
+								"name": "telegrafs7comm-helm.metrics.s7comm.plc.ip",
+								"value": "192.168.1.1" 
+							},
+							{
+								"name": "telegrafs7comm-helm.metrics.s7comm.plc.rack",
+								"value": "0" 
+							},
+							{
+								"name": "telegrafs7comm-helm.metrics.s7comm.plc.slot",
+								"value": "2" 
+							}
+					
+					
+					
+							
+
+
+				
+
+						],
+						"valueFiles": [
+							"values.yaml"
+						],
+						"values": "\ngrafana-helm:\n    ingress:\n      enabled: true\n      className: \"\"\n      annotations:\n        kubernetes.io/ingress.class: traefik\n        # kubernetes.io/tls-acme: \"true\"\n      hosts: [\"grafana.cat.edge\"]\n      path: /\n      pathType: Prefix\n      tls: \n        - hosts:\n          - grafana.cat.edge\n          secretName: grafana-tls \n"
+					},
+					"repoURL": "http://harbor.cat.cloud/chartrepo/easyiot",
+					"targetRevision": "0.2.3-cat"
+				},
+				"syncPolicy": {
+					"automated": {
+						"allowEmpty": true,
+						"prune": true,
+						"selfHeal": true
+					},
+					"syncOptions": [
+						"CreateNamespace=true"
+					]
+				}
+			}
+		}
+	}
+}
